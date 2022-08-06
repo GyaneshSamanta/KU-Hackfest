@@ -1,29 +1,18 @@
-import base64
-from io import BytesIO
-import json
-from urllib import request
-import flask
+from flask import Flask, request, jsonify
+import werkzeug
 
-app = flask(__name__)
+app = Flask(__name__)
 
 
-@app.route("/send-image", methods=['POST'])
-def send_image():
-    if request.method == 'POST':
-        user_image = request.files["image"]
-        image = cv2.imdecode(np.frombuffer(
-            user_image.read(), np.uint8), cv2.IMREAD_COLOR)
-        data_object["img"] = base64.b64encode(b.read()).decode('ascii')
+@app.route("/upload", methods=["POST"])
+def upload():
+    if request.method == "POST":
+        imagefile = request.files['image']
+        filename = werkzeug.utils.secure_filename(imagefile.filename)
+        imagefile.save(" ./uploaded-image/" + filename)
+        return jsonify({
+            "message": "Image upload success"
+        })
 
-        data = predict(image)
-
-        data_object = {}
-        data = data.reshape(data.shape[0], data.shape[1], 1)
-        data2 = array_to_img(data)
-
-        b = BytesIO()
-        data2.save(b, format="jpeg")
-        b.seek(0)
-
-        data_object["img"] = str(b.read())
-        return json.dumps(data_object)
+    if __name__ == "__main__":
+        app.run(debug=True, port=4000)
