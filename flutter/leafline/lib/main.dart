@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'utils/PrimitiveWrapper.dart';
+import 'screens/CaptureScreen.dart';
+import 'screens/DetailsScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(),
+      theme: ThemeData(brightness: Brightness.light),
       home: const Leafline(),
     );
   }
@@ -27,6 +30,7 @@ class Leafline extends StatefulWidget {
 
 class _LeaflineState extends State<Leafline> {
   int _pageIndex = 0;
+  PrimitiveWrapper count = PrimitiveWrapper(0);
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +40,11 @@ class _LeaflineState extends State<Leafline> {
           items: const [
             Icon(
               Icons.camera,
-              size: 35,
+              size: 30,
             ),
             Icon(
               Icons.list_alt,
-              size: 35,
+              size: 30,
             )
           ],
           onTap: (index) {
@@ -54,11 +58,7 @@ class _LeaflineState extends State<Leafline> {
           color: Colors.green,
         ),
         body: Center(
-          child: ListView(
-            children: [
-              _pageIndex==0?Container(child: Text("Capture"),):Container(child: Text("Details"),)
-            ],
-          ),
+          child: _pageIndex == 0 ? CaptureScreen() : DetailsScreen(),
         ),
       ),
     );
